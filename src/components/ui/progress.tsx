@@ -5,6 +5,14 @@ import * as ProgressPrimitive from "@radix-ui/react-progress";
 
 import { cn } from "@/lib/utils";
 
+/**
+ * Responsive progress bar component using Radix UI primitives.
+ *
+ * Renders a track and an indicator whose horizontal translation represents progress from 0 to 100.
+ *
+ * @param value - Progress percentage between 0 and 100; treated as 0 when `undefined`.
+ * @returns A JSX element rendering the progress track and indicator.
+ */
 function Progress({
   className,
   value,
