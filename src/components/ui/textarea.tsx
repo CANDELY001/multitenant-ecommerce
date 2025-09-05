@@ -2,6 +2,14 @@ import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
+/**
+ * Stateless textarea component that renders a styled HTML `<textarea>` and forwards native textarea props.
+ *
+ * The component applies a set of default utility classes (including focus, disabled, dark-mode and responsive variants),
+ * always sets `data-slot="textarea"`, and merges any provided `className` with the defaults.
+ *
+ * All other props are spread onto the underlying `<textarea>` (e.g., `value`, `onChange`, `placeholder`, `rows`, etc.).
+ */
 function Textarea({ className, ...props }: React.ComponentProps<"textarea">) {
   return (
     <textarea
