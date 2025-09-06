@@ -1,23 +1,120 @@
-import { Category } from "@/payload-types";
+"use client";
 import { CategoryDropdown } from "./category-dropdown";
+import { CustomCategory } from "../types";
+import { useEffect, useRef, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { ListFilterIcon } from "lucide-react";
+import { CategoriesSidebar } from "./categories-sidebar";
 
 interface Props {
-  data: Category[];
+  data: CustomCategory[];
 }
-
 export const Categories = ({ data }: Props) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const measureRef = useRef<HTMLDivElement>(null);
+  const viewAllRef = useRef<HTMLDivElement>(null);
+
+  const [visibleCount, setVisibleCount] = useState(data.length);
+  const [isAnyHovered, setIsAnyHovered] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const activeCategory = "all";
+
+  const activeCategoryIndex = data.findIndex(
+    (cat) => cat.slug === activeCategory
+  );
+  const isActiveCategoryHidden =
+    activeCategoryIndex >= visibleCount && activeCategoryIndex !== -1;
+
+  useEffect(() => {
+    const calculateVisible = () => {
+      if (!containerRef.current || !measureRef.current || !viewAllRef.current)
+        return;
+      const containerWidth = containerRef.current.offsetWidth;
+      const viewAllWidth = viewAllRef.current.offsetWidth;
+      const availableWidth = containerWidth - viewAllWidth;
+      const items = Array.from(containerRef.current.children);
+      let totalWidth = 0;
+      let visible = 0;
+
+      for (const item of items) {
+        const width = item.getBoundingClientRect().width;
+        // Break if adding this item would exceed available width
+        if (totalWidth + width >= availableWidth) break;
+        totalWidth += width;
+        visible++;
+      }
+      setVisibleCount(visible);
+    };
+
+    const resizeObserver = new ResizeObserver(calculateVisible);
+
+    // Only observe if the element exists
+    if (containerRef.current) {
+      resizeObserver.observe(containerRef.current);
+      // Initial calculation
+      calculateVisible();
+    }
+
+    return () => resizeObserver.disconnect();
+  }, [data.length]);
   return (
     <div className="relative w-full">
-      <div className="flex flex-wrap items-center">
-        {data.map((category: Category) => (
+      {/*Nav bar hidden */}
+      <CategoriesSidebar
+        Open={isSidebarOpen}
+        onOpenChange={setIsSidebarOpen}
+        data={data}
+      />
+
+      {/*Hidden ref to measure all items */}
+      <div
+        ref={measureRef}
+        className="absolute flex opacity-0 pointer-events-none"
+        style={{ position: "fixed", top: -9999, left: -9999 }}
+      >
+        {data.map((category) => (
           <div key={category.id}>
             <CategoryDropdown
               category={category}
-              isActive={false}
+              isActive={activeCategory === category.slug}
               isNavigationHovered={false}
             />
           </div>
         ))}
+      </div>
+      {/*Visible categories items */}
+      <div
+        ref={containerRef}
+        className="flex items-center flex-nowrap"
+        onMouseEnter={() => setIsAnyHovered(true)}
+        onMouseLeave={() => setIsAnyHovered(false)}
+      >
+        {data.slice(0, visibleCount).map((category) => (
+          <div key={category.id}>
+            <CategoryDropdown
+              category={category}
+              isActive={activeCategory === category.slug}
+              isNavigationHovered={isAnyHovered}
+            />
+          </div>
+        ))}
+
+        <div ref={viewAllRef} className="shrink-0">
+          <Button
+            variant="elevated"
+            className={cn(
+              "border-transparent font-semibold h-11 px-4 rounded-full hover:border-primary text-black",
+              isActiveCategoryHidden &&
+                !isAnyHovered &&
+                "bg-white border-primary "
+            )}
+            onClick={() => setIsSidebarOpen(true)}
+          >
+            View All
+            <ListFilterIcon className="ml-2" size={16} />
+          </Button>
+        </div>
       </div>
     </div>
   );

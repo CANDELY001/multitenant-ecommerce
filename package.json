@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "generate:types": "npx tsx ./node_modules/payload/bin.js generate:types"
+    "generate:types": "npx tsx ./node_modules/payload/bin.js generate:types",
+    "db:fresh": "npx tsx ./node_modules/payload/bin.js migrate:fresh",
+    "db:seed": "bun --bun run src/seed.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",
