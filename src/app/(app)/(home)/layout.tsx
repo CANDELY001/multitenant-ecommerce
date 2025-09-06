@@ -1,5 +1,7 @@
+import type { ReactNode } from "react";
+
 interface layoutProps {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 import { Footer } from "./footer";
 import { Navbar } from "./navbar";
