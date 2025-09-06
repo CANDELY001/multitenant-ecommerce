@@ -40,7 +40,7 @@ export const Categories = ({ data }: Props) => {
       for (const item of items) {
         const width = item.getBoundingClientRect().width;
         // Break if adding this item would exceed available width
-        if (totalWidth + width >= availableWidth) break;
+        if (totalWidth + width > availableWidth) break;
         totalWidth += width;
         visible++;
       }

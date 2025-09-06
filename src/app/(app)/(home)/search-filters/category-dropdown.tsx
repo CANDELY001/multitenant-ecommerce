@@ -49,6 +49,7 @@ export const CategoryDropdown = ({
       <div className="relative">
         <Button
           variant="elevated"
+          asChild
           className={cn(
             "border-transparent font-semibold h-11 px-4 rounded-full hover:rounded-full hover:border-primary text-black",
             isActive && !isNavigationHovered && "bg-white border-primary ",

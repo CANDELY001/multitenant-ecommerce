@@ -63,7 +63,7 @@ export const CategoriesSidebar = ({ Open, onOpenChange, data }: Props) => {
 
   const backgroundColor = selectedCategory?.color || "white";
   return (
-    <Sheet open={Open} onOpenChange={onOpenChange}>
+    <Sheet open={Open} onOpenChange={handleOpenChange}>
       <SheetContent
         side="left"
         className="p-0 transition-none"
