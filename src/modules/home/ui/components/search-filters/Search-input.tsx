@@ -2,7 +2,7 @@
 import { Input } from "@/components/ui/input";
 import { BookmarkCheckIcon, ListFilter, SearchIcon } from "lucide-react";
 import { CategoriesSidebar } from "./categories-sidebar";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useTRPC } from "@/trpc/client";
 import { useQuery } from "@tanstack/react-query";
@@ -15,8 +15,20 @@ interface Props {
 
 export const SearchInput = ({ disabled }: Props) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isClient, setIsClient] = useState(false);
+
   const trpc = useTRPC();
-  const session = useQuery(trpc.auth.session.queryOptions());
+  const session = useQuery({
+    ...trpc.auth.session.queryOptions(),
+    retry: false,
+    refetchOnWindowFocus: false,
+  });
+
+  // Prevent hydration mismatch by only rendering user-dependent content on client
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   return (
     <div className="flex items-center gap-2 w-full">
       <CategoriesSidebar onOpenChange={setIsSidebarOpen} Open={isSidebarOpen} />
@@ -36,8 +48,8 @@ export const SearchInput = ({ disabled }: Props) => {
       >
         <ListFilter className="size-4" />
       </Button>
-      {/* TODO: Add library button */}
-      {session.data?.user && (
+      {/* Library button - only render on client to prevent hydration mismatch */}
+      {isClient && session.data?.user && (
         <Button asChild variant="elevated">
           <Link href="/library">
             <BookmarkCheckIcon className="size-4" />
