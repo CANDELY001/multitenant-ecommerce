@@ -2,7 +2,7 @@ import { z } from "zod";
 import { baseProcedure, createTRPCRouter } from "@/trpc/init";
 import { headers as getHeaders, cookies as getCookies } from "next/headers";
 import { TRPCError } from "@trpc/server";
-import { AUTH_COOKIE } from "./constants";
+import { generateAuthCookie } from "../utils";
 import { registerSchema } from "../ui/schemas";
 
 export const authRouter = createTRPCRouter({
@@ -10,11 +10,6 @@ export const authRouter = createTRPCRouter({
     const headers = await getHeaders();
     const session = await ctx.payload.auth({ headers });
     return session;
-  }),
-  logout: baseProcedure.mutation(async () => {
-    const cookies = await getCookies();
-    cookies.delete(AUTH_COOKIE);
-    return { success: true, message: "Logged out successfully" };
   }),
   register: baseProcedure
     .input(registerSchema)
@@ -45,24 +40,10 @@ export const authRouter = createTRPCRouter({
         });
       }
 
-      const cookies = await getCookies();
-      cookies.set({
-        name: AUTH_COOKIE,
-        value: loginData.token,
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        path: "/",
-        maxAge: 60 * 60 * 24 * 30, // 30 days
-        //TODO: Ensure cross-domain cookie sharing
-        //funréd.com // initial cookie
-        //candely.funréd.com // subdomain cookie doesn't exist
-      });
-
-      return { 
-        success: true, 
+      return {
+        success: true,
         user: loginData.user,
-        message: "Account created successfully" 
+        message: "Account created successfully",
       };
     }),
   login: baseProcedure
@@ -86,24 +67,15 @@ export const authRouter = createTRPCRouter({
           message: "Invalid email or password",
         });
       }
-      const cookies = await getCookies();
-      cookies.set({
-        name: AUTH_COOKIE,
+      await generateAuthCookie({
+        prefix: ctx.payload.config.cookiePrefix,
         value: data.token,
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        path: "/",
-        maxAge: 60 * 60 * 24 * 30, // 30 days
-        //TODO: Ensure cross-domain cookie sharing
-        //funréd.com // initial cookie
-        //candely.funréd.com // subdomain cookie doesn't exist
       });
-      
-      return { 
-        success: true, 
+
+      return {
+        success: true,
         user: data.user,
-        message: "Logged in successfully" 
+        message: "Logged in successfully",
       };
     }),
 });
