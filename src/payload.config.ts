@@ -21,6 +21,7 @@ export default buildConfig({
     },
   },
   collections: [Users, Media, Categories],
+  cookiePrefix: "funred",
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || "",
   typescript: {
