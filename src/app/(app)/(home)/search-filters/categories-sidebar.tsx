@@ -10,14 +10,20 @@ import { useState } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useTRPC } from "@/trpc/client";
+import { useQuery } from "@tanstack/react-query";
+import { Category } from "@/payload-types";
 
 interface Props {
   Open: boolean;
   onOpenChange: (open: boolean) => void;
-  data: CustomCategory[];
 }
 
-export const CategoriesSidebar = ({ Open, onOpenChange, data }: Props) => {
+export const CategoriesSidebar = ({ Open, onOpenChange }: Props) => {
+  const trpc = useTRPC();
+  const { data } = useQuery(trpc.categories.getMany.queryOptions());
+  const formattedData = (data as CustomCategory[]) || [];
+
   const router = useRouter();
   const [parentCategories, setParentCategories] = useState<
     CustomCategory[] | null
@@ -26,7 +32,7 @@ export const CategoriesSidebar = ({ Open, onOpenChange, data }: Props) => {
     useState<CustomCategory | null>(null);
 
   //If we have parent categories , show those, otherwise show root categories
-  const currentCategories = parentCategories ?? data ?? [];
+  const currentCategories = parentCategories ?? formattedData;
 
   const handleClickCategory = (category: CustomCategory) => {
     if (category.subcategories && category.subcategories.length > 0) {
