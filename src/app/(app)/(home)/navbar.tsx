@@ -53,7 +53,7 @@ export const Navbar = () => {
       {/* logo */}
       <Link href="/" className="pl-6 flex items-center">
         <span className={cn("text-5xl font-semibold", poppins.className)}>
-          Candely
+          funréd
         </span>
       </Link>
       <NavbarSidebar
@@ -80,13 +80,17 @@ export const Navbar = () => {
           variant="secondary"
           className="border-l border-r-0 border-b-0  border-t-0 rounded-none bg-white  hover:bg-pink-400 transition-colors h-full px-12"
         >
-          <Link href="/sign-in">Log in</Link>
+          <Link prefetch href="/sign-in">
+            Log in
+          </Link>
         </Button>
         <Button
           asChild
           className="border-l border-r-0 border-b-0  border-t-0 rounded-none bg-black text-white  hover:bg-pink-400 hover:text-black transition-colors h-full px-12"
         >
-          <Link href="/sign-up">Start Selling</Link>
+          <Link prefetch href="/sign-up">
+            Start Selling
+          </Link>
         </Button>
       </div>
 

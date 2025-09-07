@@ -4,7 +4,7 @@
     "": {
       "name": "multitenant-ecommerce",
       "dependencies": {
-        "@hookform/resolvers": "^5.2.1",
+        "@hookform/resolvers": "3.9.0",
         "@payloadcms/db-mongodb": "^3.54.0",
         "@payloadcms/next": "^3.54.0",
         "@payloadcms/payload-cloud": "^3.54.0",
@@ -317,7 +317,7 @@
 
     "@floating-ui/utils": ["@floating-ui/utils@0.2.10", "https://registry.npmmirror.com/@floating-ui/utils/-/utils-0.2.10.tgz", {}, "sha512-aGTxbpbg8/b5JfU1HXSrbH3wXZuLPJcNEcZQFMxLs3oSzgtVu6nFPkbbGGUvBcUjKV2YyB9Wxxabo+HEH9tcRQ=="],
 
-    "@hookform/resolvers": ["@hookform/resolvers@5.2.1", "https://registry.npmmirror.com/@hookform/resolvers/-/resolvers-5.2.1.tgz", { "dependencies": { "@standard-schema/utils": "^0.3.0" }, "peerDependencies": { "react-hook-form": "^7.55.0" } }, "sha512-u0+6X58gkjMcxur1wRWokA7XsiiBJ6aK17aPZxhkoYiK5J+HcTx0Vhu9ovXe6H+dVpO6cjrn2FkJTryXEMlryQ=="],
+    "@hookform/resolvers": ["@hookform/resolvers@3.9.0", "https://registry.npmmirror.com/@hookform/resolvers/-/resolvers-3.9.0.tgz", { "peerDependencies": { "react-hook-form": "^7.0.0" } }, "sha512-bU0Gr4EepJ/EQsH/IwEzYLsT/PEj5C0ynLQ4m+GSHS+xKH4TfSelhluTgOaoc4kA5s7eCsQbM4wvZLzELmWzUg=="],
 
     "@humanfs/core": ["@humanfs/core@0.19.1", "https://registry.npmmirror.com/@humanfs/core/-/core-0.19.1.tgz", {}, "sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA=="],
 
@@ -692,8 +692,6 @@
     "@smithy/util-utf8": ["@smithy/util-utf8@4.1.0", "https://registry.npmmirror.com/@smithy/util-utf8/-/util-utf8-4.1.0.tgz", { "dependencies": { "@smithy/util-buffer-from": "^4.1.0", "tslib": "^2.6.2" } }, "sha512-mEu1/UIXAdNYuBcyEPbjScKi/+MQVXNIuY/7Cm5XLIWe319kDrT5SizBE95jqtmEXoDbGoZxKLCMttdZdqTZKQ=="],
 
     "@smithy/util-waiter": ["@smithy/util-waiter@4.1.0", "https://registry.npmmirror.com/@smithy/util-waiter/-/util-waiter-4.1.0.tgz", { "dependencies": { "@smithy/abort-controller": "^4.1.0", "@smithy/types": "^4.4.0", "tslib": "^2.6.2" } }, "sha512-IUuj2zpGdeKaY5OdGnU83BUJsv7OA9uw3rNVSOuvzLMXMpBTU+W6V0SsQh6iI32lKUJArlnEU4BIzp83hghR/g=="],
-
-    "@standard-schema/utils": ["@standard-schema/utils@0.3.0", "https://registry.npmmirror.com/@standard-schema/utils/-/utils-0.3.0.tgz", {}, "sha512-e7Mew686owMaPJVNNLs55PUvgz371nKgwsc4vxE49zsODpJEnxgxRo2y/OKrqueavXgZNMDVj3DdHFlaSAeU8g=="],
 
     "@swc/helpers": ["@swc/helpers@0.5.15", "https://registry.npmmirror.com/@swc/helpers/-/helpers-0.5.15.tgz", { "dependencies": { "tslib": "^2.8.0" } }, "sha512-JQ5TuMi45Owi4/BIMAJBoSQoOJu12oOk/gADqlcUL9JEdHB8vyjUSsxqeNXnmXHjYKMi2WcYtezGEEhqUI/E2g=="],
 
