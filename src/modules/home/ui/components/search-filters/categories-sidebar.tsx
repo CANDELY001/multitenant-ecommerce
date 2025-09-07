@@ -5,7 +5,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { CustomCategory } from "../types";
+import { CustomCategory } from "../../../../../app/(app)/(home)/types";
 import { useState } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";

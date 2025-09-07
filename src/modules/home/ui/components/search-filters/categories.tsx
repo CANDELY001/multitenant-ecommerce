@@ -1,16 +1,21 @@
 "use client";
 import { CategoryDropdown } from "./category-dropdown";
-import { CustomCategory } from "../types";
+import { CustomCategory } from "../../../../../app/(app)/(home)/types";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ListFilterIcon } from "lucide-react";
 import { CategoriesSidebar } from "./categories-sidebar";
+import { useParams } from "next/navigation";
+import { ca } from "date-fns/locale";
 
 interface Props {
   data: CustomCategory[];
 }
 export const Categories = ({ data }: Props) => {
+  const params = useParams();
+  const categoryParam = params.category as string | undefined;
+
   const containerRef = useRef<HTMLDivElement>(null);
   const measureRef = useRef<HTMLDivElement>(null);
   const viewAllRef = useRef<HTMLDivElement>(null);
@@ -18,7 +23,7 @@ export const Categories = ({ data }: Props) => {
   const [visibleCount, setVisibleCount] = useState(data?.length || 0);
   const [isAnyHovered, setIsAnyHovered] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const activeCategory = "all";
+  const activeCategory = categoryParam || "all";
 
   const activeCategoryIndex = data.findIndex(
     (cat) => cat.slug === activeCategory
@@ -100,10 +105,10 @@ export const Categories = ({ data }: Props) => {
           <Button
             variant="elevated"
             className={cn(
-              "border-transparent bg-transparent font-semibold h-11 px-4 rounded-full hover:border-primary text-black",
+              "border-transparent bg-transparent font-semibold h-11 px-4 rounded-full hover:bg-white hover:border-primary text-black",
               isActiveCategoryHidden &&
                 !isAnyHovered &&
-                "bg-white border-primary "
+                " border-primary bg-white"
             )}
             onClick={() => setIsSidebarOpen(true)}
           >
