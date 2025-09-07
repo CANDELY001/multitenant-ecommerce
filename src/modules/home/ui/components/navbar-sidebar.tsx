@@ -44,7 +44,7 @@ export const NavbarSidebar = ({ items, open, onOpenchange }: Props) => {
             </Link>
           ))}
           {/* Auth Links */}
-          {!session.data ? (
+          {!session.data?.user ? (
             <div className="border-t">
               <Link
                 onClick={() => onOpenchange(false)}
