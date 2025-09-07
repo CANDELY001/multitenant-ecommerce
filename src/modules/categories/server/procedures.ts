@@ -16,7 +16,7 @@ export const categoriesRouter = createTRPCRouter({
         (subcategory: any) => ({
           // Because of Depth: 1 we are confident doc will be type or Category
           ...(subcategory as Category),
-          subcategories: undefined, // Ensure subcategories is always undefined
+          //subcategories: undefined,  Ensure subcategories is always undefined
         })
       ),
     }));
