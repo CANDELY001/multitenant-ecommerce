@@ -15,7 +15,7 @@ export const Categories = ({ data }: Props) => {
   const measureRef = useRef<HTMLDivElement>(null);
   const viewAllRef = useRef<HTMLDivElement>(null);
 
-  const [visibleCount, setVisibleCount] = useState(data.length);
+  const [visibleCount, setVisibleCount] = useState(data?.length || 0);
   const [isAnyHovered, setIsAnyHovered] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const activeCategory = "all";
@@ -61,11 +61,7 @@ export const Categories = ({ data }: Props) => {
   return (
     <div className="relative w-full">
       {/*Nav bar hidden */}
-      <CategoriesSidebar
-        Open={isSidebarOpen}
-        onOpenChange={setIsSidebarOpen}
-        data={data}
-      />
+      <CategoriesSidebar Open={isSidebarOpen} onOpenChange={setIsSidebarOpen} />
 
       {/*Hidden ref to measure all items */}
       <div
@@ -104,7 +100,7 @@ export const Categories = ({ data }: Props) => {
           <Button
             variant="elevated"
             className={cn(
-              "border-transparent font-semibold h-11 px-4 rounded-full hover:border-primary text-black",
+              "border-transparent bg-transparent font-semibold h-11 px-4 rounded-full hover:border-primary text-black",
               isActiveCategoryHidden &&
                 !isAnyHovered &&
                 "bg-white border-primary "

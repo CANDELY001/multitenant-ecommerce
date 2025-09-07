@@ -51,7 +51,7 @@ export const CategoryDropdown = ({
           variant="elevated"
           asChild
           className={cn(
-            "border-transparent font-semibold h-11 px-4 rounded-full hover:rounded-full hover:border-primary text-black",
+            "border-transparent bg-transparent font-semibold h-11 px-4 rounded-full hover:rounded-full hover:border-primary text-black",
             isActive && !isNavigationHovered && "bg-white border-primary ",
             isOpen &&
               "bg-white border-primary shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] -translate-x-[4px] -translate-y-[4px] "
