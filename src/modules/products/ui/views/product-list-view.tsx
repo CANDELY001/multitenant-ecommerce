@@ -26,7 +26,11 @@ export const ProductListView = ({
         </div>
         <div className="lg:col-span-4 xl:col-span-6">
           <Suspense fallback={<ProductListSkeleton />}>
-            <ProductList category={category} />
+            <ProductList
+              category={category}
+              tenantSlug={tenantSlug}
+              narrowView={narrowView}
+            />
           </Suspense>
         </div>
       </div>

@@ -17,6 +17,7 @@ export const productRouter = createTRPCRouter({
         maxPrice: z.string().nullable().optional(),
         tags: z.array(z.string()).nullable().optional(),
         sort: z.enum(sortValues).nullable().optional(),
+        tenantSlug: z.string().nullable().optional(),
       })
     )
     .query(async ({ ctx, input }) => {
@@ -90,9 +91,44 @@ export const productRouter = createTRPCRouter({
         };
       }
 
+      // Filter by tenant if tenantSlug is provided
+      if (input.tenantSlug) {
+        // First, find the tenant by slug
+        const tenantData = await ctx.payload.find({
+          collection: "tenants",
+          where: {
+            slug: {
+              equals: input.tenantSlug,
+            },
+          },
+          limit: 1,
+        });
+
+        const tenant = tenantData.docs[0];
+        if (tenant) {
+          where["tenant"] = {
+            equals: tenant.id,
+          };
+        } else {
+          // If tenant doesn't exist, return empty results
+          return {
+            docs: [],
+            totalDocs: 0,
+            limit: input.limit,
+            totalPages: 0,
+            page: input.cursor,
+            pagingCounter: 0,
+            hasPrevPage: false,
+            hasNextPage: false,
+            prevPage: null,
+            nextPage: null,
+          };
+        }
+      }
+
       const data = await ctx.payload.find({
         collection: "products",
-        depth: 1, //Populate category and images
+        depth: 2, //Populate category and images, tenant & tenant.image
         sort,
         where: where,
         limit: input.limit,
@@ -104,7 +140,7 @@ export const productRouter = createTRPCRouter({
         docs: data.docs.map((product) => ({
           ...product,
           image: product.images as Media | null,
-          tenant: product.tenant as Tenant & { image: Media | null },
+          tenant: product.tenant as Tenant,
         })) as (Product & { image: Media | null })[],
       };
     }),
