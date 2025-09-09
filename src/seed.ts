@@ -157,8 +157,8 @@ export const seedCategories = async () => {
   await payload.create({
     collection: "users",
     data: {
-      email: "candely1charifa@gmail.com",
-      password: "akira123",
+      email: process.env.ADMIN_EMAIL || "",
+      password: process.env.ADMIN_PASSWORD || "",
       roles: ["super-admin"],
       username: "admin",
       tenants: [
