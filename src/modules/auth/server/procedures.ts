@@ -14,6 +14,14 @@ export const authRouter = createTRPCRouter({
   register: baseProcedure
     .input(registerSchema)
     .mutation(async ({ input, ctx }) => {
+      const tenant = await ctx.payload.create({
+        collection: "tenants",
+        data: {
+          name: input.username,
+          slug: input.username,
+          stripeAccountId: "test",
+        },
+      });
       // First create the user
       const user = await ctx.payload.create({
         collection: "users",
@@ -21,6 +29,7 @@ export const authRouter = createTRPCRouter({
           email: input.email,
           username: input.username,
           password: input.password, // This will be hashed automatically by Payload
+          tenants: [{ tenant: tenant.id }],
         },
       });
 
