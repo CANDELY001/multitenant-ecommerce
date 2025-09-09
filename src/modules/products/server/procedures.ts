@@ -1,7 +1,7 @@
 import { baseProcedure, createTRPCRouter } from "@/trpc/init";
 import { Sort, Where } from "payload";
 import { z } from "zod";
-import { Category, Media, Product } from "@/payload-types";
+import { Category, Media, Product, Tenant } from "@/payload-types";
 import { sub } from "date-fns";
 import { sortValues } from "../search-params";
 import { DEFAULT_LIMIT } from "@/constant";
@@ -104,6 +104,7 @@ export const productRouter = createTRPCRouter({
         docs: data.docs.map((product) => ({
           ...product,
           image: product.images as Media | null,
+          tenant: product.tenant as Tenant & { image: Media | null },
         })) as (Product & { image: Media | null })[],
       };
     }),

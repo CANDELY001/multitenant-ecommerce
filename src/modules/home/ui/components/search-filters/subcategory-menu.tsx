@@ -5,10 +5,9 @@ import { CustomCategory } from "../../../../../app/(app)/(home)/types";
 interface Props {
   category: CustomCategory;
   isOpen: boolean;
-  position: { top: number; left: number };
 }
 
-export const SubcategoryMenu = ({ category, isOpen, position }: Props) => {
+export const SubcategoryMenu = ({ category, isOpen }: Props) => {
   if (
     !isOpen ||
     !category.subcategories ||
@@ -19,10 +18,10 @@ export const SubcategoryMenu = ({ category, isOpen, position }: Props) => {
   const bgColor = `${category.color}` || "#F5F5F5";
   return (
     <div
-      className="fixed z-100"
+      className="absolute z-100"
       style={{
-        top: position.top,
-        left: position.left,
+        top: "100%",
+        left: 0,
       }}
     >
       {/* Invisible bridge to maintain hover between button and dropdown */}

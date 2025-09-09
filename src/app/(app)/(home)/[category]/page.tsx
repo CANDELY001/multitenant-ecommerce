@@ -10,6 +10,7 @@ import type { SearchParams } from "nuqs";
 import { loadProductFilters } from "@/modules/products/search-params";
 import { ProductSort } from "@/modules/products/ui/components/product-sort";
 import { ProductListView } from "@/modules/products/ui/views/product-list-view";
+import { DEFAULT_LIMIT } from "@/constant";
 
 interface Props {
   params: Promise<{ category: string }>;
@@ -20,8 +21,12 @@ const CategoryPage = async ({ params, searchParams }: Props) => {
   const { category } = await params;
   const filters = await loadProductFilters(searchParams);
   const queryClient = getQueryClient();
-  void queryClient.prefetchQuery(
-    trpc.products.getMany.queryOptions({ category, ...filters })
+  void queryClient.prefetchInfiniteQuery(
+    trpc.products.getMany.infiniteQueryOptions({
+      category,
+      ...filters,
+      limit: DEFAULT_LIMIT,
+    })
   );
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>

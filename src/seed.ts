@@ -140,6 +140,34 @@ const categories = [
 export const seedCategories = async () => {
   const payload = await getPayload({ config });
 
+  //const adminAccount = await stripe.accounts.create({});
+
+  // Create admin tenant
+  const adminTenant = await payload.create({
+    collection: "tenants",
+    data: {
+      name: "admin",
+      slug: "admin",
+      // stripeAccountId: "acct_test_admin_placeholder", // Placeholder for seeding
+      // stripeDetailsSubmitted: false,
+    },
+  });
+
+  // Create admin user
+  await payload.create({
+    collection: "users",
+    data: {
+      email: process.env.ADMIN_EMAIL || "",
+      password: process.env.ADMIN_PASSWORD || "",
+      roles: ["super-admin"],
+      username: "admin",
+      tenants: [
+        {
+          tenant: adminTenant.id,
+        },
+      ],
+    },
+  });
   for (const category of categories) {
     // Check if category already exists
     // const { docs: existingCategories } = await payload.find({
