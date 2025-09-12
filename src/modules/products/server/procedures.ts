@@ -5,8 +5,19 @@ import { Category, Media, Product, Tenant } from "@/payload-types";
 import { sub } from "date-fns";
 import { sortValues } from "../search-params";
 import { DEFAULT_LIMIT } from "@/constant";
+import { get } from "http";
 
 export const productRouter = createTRPCRouter({
+  getOne: baseProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const data = await ctx.payload.findByID({
+        collection: "products",
+        id: input.id,
+        depth: 2, //Populate category and images, tenant & tenant.image
+      });
+      return data as Product | null;
+    }),
   getMany: baseProcedure
     .input(
       z.object({
