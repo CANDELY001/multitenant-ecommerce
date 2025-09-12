@@ -6,6 +6,7 @@ import { multiTenantPlugin } from "@payloadcms/plugin-multi-tenant";
 import path from "path";
 import { buildConfig } from "payload";
 import { fileURLToPath } from "url";
+import { Config } from "./payload-types";
 
 import { Users } from "./collections/Users";
 import { Media } from "./collections/Media";
