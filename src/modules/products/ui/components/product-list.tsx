@@ -64,9 +64,24 @@ export const ProductList = ({ category, tenantSlug, narrowView }: Props) => {
               key={product.id}
               id={product.id.toString()}
               name={product.name}
-              imageUrl={product.image?.url}
-              tenantSlug={product.tenant?.slug || "admin"}
-              tenantImageUrl={product.tenant?.image?.url}
+              imageUrl={
+                typeof product.image === "object" && product.image?.url
+                  ? product.image.url
+                  : undefined
+              }
+              tenantSlug={
+                typeof product.tenant === "object" && product.tenant?.slug
+                  ? product.tenant.slug
+                  : "admin"
+              }
+              tenantImageUrl={
+                typeof product.tenant === "object" &&
+                product.tenant?.image &&
+                typeof product.tenant.image === "object" &&
+                product.tenant.image?.url
+                  ? product.tenant.image.url
+                  : undefined
+              }
               reviewRating={4}
               reviewCount={5}
               price={product.price}

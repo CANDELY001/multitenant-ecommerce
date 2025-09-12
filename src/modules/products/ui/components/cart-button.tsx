@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-//import { useCart } from "@/modules/checkout/hooks/use-cart";
+import { useCart } from "@/modules/checkout/hooks/use-cart";
 import Link from "next/link";
 
 interface Props {
@@ -10,7 +10,7 @@ interface Props {
 }
 
 export const CartButton = ({ tenantSlug, productId, isPurchased }: Props) => {
-  //const cart = useCart(tenantSlug);
+  const cart = useCart(tenantSlug);
 
   if (isPurchased) {
     return (
@@ -29,13 +29,13 @@ export const CartButton = ({ tenantSlug, productId, isPurchased }: Props) => {
   return (
     <Button
       className={cn(
-        "flex-1 bg-pink-400"
-        //cart.isProductInCart(productId) && "bg-white"
+        "flex-1 bg-pink-400",
+        cart.isProductInCart(productId) && "bg-white"
       )}
       variant="elevated"
-      //onClick={() => cart.toggleProduct(productId)}
+      onClick={() => cart.toggleProduct(productId)}
     >
-      {/*cart.isProductInCart(productId) ? "Remove from Cart" : "Add to cart"*/}
+      {cart.isProductInCart(productId) ? "Remove from Cart" : "Add to cart"}
     </Button>
   );
 };

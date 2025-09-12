@@ -46,7 +46,11 @@ export const ProductView = ({ productId, tenantSlug }: ProductViewProps) => {
       <div className="border rounded-sm bg-white overflow-hidden">
         <div className="relative aspect-[3.9] border-b">
           <Image
-            src={data?.images?.url || "/placeholder.png"}
+            src={
+              typeof data?.images === "object" && data?.images?.url
+                ? data.images.url
+                : "/placeholder.png"
+            }
             alt={data?.name || "Placeholder"}
             fill
             className="object-cover"
@@ -71,17 +75,26 @@ export const ProductView = ({ productId, tenantSlug }: ProductViewProps) => {
                   href={generateTenantURL(tenantSlug)}
                   className="flex items-center gap-2"
                 >
-                  {data?.tenant?.image?.url && (
-                    <Image
-                      src={data.tenant.image.url}
-                      alt={data.tenant.name || "Tenant"}
-                      width={20}
-                      height={20}
-                      className="rounded-full border shrink-0 size-[20px]"
-                    />
-                  )}
+                  {typeof data?.tenant === "object" &&
+                    data?.tenant?.image &&
+                    typeof data.tenant.image === "object" &&
+                    data.tenant.image.url && (
+                      <Image
+                        src={data.tenant.image.url}
+                        alt={
+                          typeof data.tenant === "object" && data.tenant.name
+                            ? data.tenant.name
+                            : "Tenant"
+                        }
+                        width={20}
+                        height={20}
+                        className="rounded-full border shrink-0 size-[20px]"
+                      />
+                    )}
                   <p className="text-base underline font-medium">
-                    {data?.tenant?.name || "Unknown Tenant"}
+                    {typeof data?.tenant === "object" && data?.tenant?.name
+                      ? data.tenant.name
+                      : "Unknown Tenant"}
                   </p>
                 </Link>
               </div>
@@ -115,14 +128,14 @@ export const ProductView = ({ productId, tenantSlug }: ProductViewProps) => {
             <div className="border-t lg:border-t-0 lg: border-l h-full">
               <div className="flex flex-col gap-4 p-6 border-b">
                 <div className="flex flex-row items-center gap-2">
-                  {/* <CartButton
-                    isPurchased={data?.isPurchased}
+                  <CartButton
+                    //isPurchased={data?.isPurchased}
                     productId={productId}
                     tenantSlug={tenantSlug}
-                  /> */}
-                  <Button variant={"elevated"} className="flex-1 bg-pink-400">
+                  />
+                  {/* <Button variant={"elevated"} className="flex-1 bg-pink-400">
                     Add to cart
-                  </Button>
+                  </Button> */}
 
                   <Button
                     className="size-12"
@@ -130,7 +143,7 @@ export const ProductView = ({ productId, tenantSlug }: ProductViewProps) => {
                     onClick={() => {
                       setIsCopied(true);
                       navigator.clipboard.writeText(window.location.href);
-                      toast.success("URL Copied");
+                      toast.success("Copied!");
                       setTimeout(() => {
                         setIsCopied(false);
                       }, 1000);
