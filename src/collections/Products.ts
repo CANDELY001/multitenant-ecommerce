@@ -14,10 +14,10 @@ export const Products: CollectionConfig = {
   //   },
   //   delete: ({ req }) => isSuperAdmin(req.user),
   // },
-  // admin: {
-  //   useAsTitle: "name",
-  //   description: "You must verify your account before creating products",
-  // },
+  admin: {
+    useAsTitle: "name",
+    // description: "You must verify your account before creating products",
+  },
   fields: [
     {
       name: "name",

@@ -6,6 +6,7 @@ interface CheckoutSidebarProps {
   total: number;
   onPurchase: () => void;
   isCanceled?: boolean;
+  isPending?: boolean;
   disabled?: boolean;
 }
 
