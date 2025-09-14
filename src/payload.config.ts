@@ -71,31 +71,13 @@ export default buildConfig({
     payloadCloudPlugin(),
     multiTenantPlugin({
       collections: {
-        products: {
-          useTenantAccess: true,
-          tenantFieldOverrides: {
-            admin: {
-              // Don't hide tenant field for super admins
-              hidden: false,
-            },
-          },
-        },
-        media: {
-          useTenantAccess: true,
-        },
+        products: {},
+        media: {},
       },
       tenantsArrayField: {
         includeDefaultField: false,
       },
-      userHasAccessToAllTenants: (user) => {
-        const isSuper = isSuperAdmin(user);
-        console.log("Super admin check in plugin:", {
-          user: user?.email,
-          isSuper,
-          roles: user?.roles,
-        });
-        return isSuper;
-      },
+      userHasAccessToAllTenants: (user) => isSuperAdmin(user),
     }),
   ],
 });
