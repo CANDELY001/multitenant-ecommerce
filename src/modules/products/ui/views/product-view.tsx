@@ -120,7 +120,7 @@ export const ProductView = ({ productId, tenantSlug }: ProductViewProps) => {
             </div>
             <div className="p-6">
               {product?.description ? (
-                <p>{product.description}</p>
+                <RichText data={product.description} />
               ) : (
                 <p className="font-medium text-muted-foreground italic">
                   No description provided

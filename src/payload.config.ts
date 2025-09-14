@@ -1,7 +1,7 @@
 // storage-adapter-import-placeholder
 import { mongooseAdapter } from "@payloadcms/db-mongodb";
 import { payloadCloudPlugin } from "@payloadcms/payload-cloud";
-import { lexicalEditor } from "@payloadcms/richtext-lexical";
+import { lexicalEditor, UploadFeature } from "@payloadcms/richtext-lexical";
 import { multiTenantPlugin } from "@payloadcms/plugin-multi-tenant";
 import path from "path";
 import { buildConfig } from "payload";
@@ -42,7 +42,23 @@ export default buildConfig({
     Reviews,
   ],
   cookiePrefix: "funred",
-  editor: lexicalEditor(),
+  editor: lexicalEditor({
+    features: ({ defaultFeatures }) => [
+      ...defaultFeatures,
+      UploadFeature({
+        collections: {
+          media: {
+            fields: [
+              {
+                name: "alt",
+                type: "text",
+              },
+            ],
+          },
+        },
+      }),
+    ],
+  }),
   secret: process.env.PAYLOAD_SECRET || "",
   typescript: {
     declare: false,
@@ -55,20 +71,31 @@ export default buildConfig({
     payloadCloudPlugin(),
     multiTenantPlugin({
       collections: {
-        // Temporarily comment out products to test
         products: {
           useTenantAccess: true,
           tenantFieldOverrides: {
             admin: {
-              hidden: true,
+              // Don't hide tenant field for super admins
+              hidden: false,
             },
           },
+        },
+        media: {
+          useTenantAccess: true,
         },
       },
       tenantsArrayField: {
         includeDefaultField: false,
       },
-      userHasAccessToAllTenants: (user) => isSuperAdmin(user),
+      userHasAccessToAllTenants: (user) => {
+        const isSuper = isSuperAdmin(user);
+        console.log("Super admin check in plugin:", {
+          user: user?.email,
+          isSuper,
+          roles: user?.roles,
+        });
+        return isSuper;
+      },
     }),
   ],
 });
