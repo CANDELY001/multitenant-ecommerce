@@ -114,7 +114,9 @@ export const libraryRouter = createTRPCRouter({
         docs: dataWithSummarizedReview.map((doc) => ({
           ...doc, // Spread all product properties
           image: (doc as unknown as Product).images as Media | null, // Map image property with type assertion
-          tenant: (doc as unknown as Product).tenant as Tenant & { image: Media | null },
+          tenant: (doc as unknown as Product).tenant as Tenant & {
+            image: Media | null;
+          },
         })),
       };
     }),
