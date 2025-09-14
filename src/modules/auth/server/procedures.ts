@@ -59,10 +59,15 @@ export const authRouter = createTRPCRouter({
       }
 
       // Set the auth cookie
-      await generateAuthCookie({
-        prefix: ctx.payload.config.cookiePrefix,
-        value: loginData.token,
-      });
+      try {
+        await generateAuthCookie({
+          prefix: ctx.payload.config.cookiePrefix,
+          value: loginData.token,
+        });
+        //console.log("Registration: Auth cookie set successfully");
+      } catch (error) {
+        console.error("Registration: Failed to set auth cookie:", error);
+      }
 
       return {
         success: true,
@@ -91,10 +96,15 @@ export const authRouter = createTRPCRouter({
           message: "Invalid email or password",
         });
       }
-      await generateAuthCookie({
-        prefix: ctx.payload.config.cookiePrefix,
-        value: data.token,
-      });
+      try {
+        await generateAuthCookie({
+          prefix: ctx.payload.config.cookiePrefix,
+          value: data.token,
+        });
+        console.log("Login: Auth cookie set successfully");
+      } catch (error) {
+        console.error("Login: Failed to set auth cookie:", error);
+      }
 
       return {
         success: true,
