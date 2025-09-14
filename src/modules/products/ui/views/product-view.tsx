@@ -39,6 +39,9 @@ export const ProductView = ({ productId, tenantSlug }: ProductViewProps) => {
     trpc.products.getOne.queryOptions({ id: productId })
   );
 
+  // Type assertion to access all product properties
+  const product = data as any;
+
   const [isCopied, setIsCopied] = useState(false);
 
   return (
@@ -47,11 +50,11 @@ export const ProductView = ({ productId, tenantSlug }: ProductViewProps) => {
         <div className="relative aspect-[3.9] border-b">
           <Image
             src={
-              typeof data?.images === "object" && data?.images?.url
-                ? data.images.url
+              typeof product?.image === "object" && product?.image?.url
+                ? product.image.url
                 : "/placeholder.png"
             }
-            alt={data?.name || "Placeholder"}
+            alt={product?.name || "Placeholder"}
             fill
             className="object-cover"
           />
@@ -59,13 +62,13 @@ export const ProductView = ({ productId, tenantSlug }: ProductViewProps) => {
         <div className="grid grid-cols-1 lg:grid-cols-6">
           <div className="col-span-4">
             <div className="p-6">
-              <h1 className="text-4xl font-medium">{data?.name}</h1>
+              <h1 className="text-4xl font-medium">{product?.name}</h1>
             </div>
             <div className="border-y flex">
               <div className="px-6 py-4 flex items-center justify-center border-r">
                 <div className="px-2 py-1 border bg-pink-400 w-fit">
                   <p className="text-base font-medium">
-                    {formatCurrency(data?.price || 0)}
+                    {formatCurrency(product?.price || 0)}
                   </p>
                 </div>
               </div>
@@ -115,8 +118,8 @@ export const ProductView = ({ productId, tenantSlug }: ProductViewProps) => {
               </div>
             </div>
             <div className="p-6">
-              {data?.description ? (
-                <p>{data.description}</p>
+              {product?.description ? (
+                <p>{product.description}</p>
               ) : (
                 <p className="font-medium text-muted-foreground italic">
                   No description provided
@@ -129,13 +132,10 @@ export const ProductView = ({ productId, tenantSlug }: ProductViewProps) => {
               <div className="flex flex-col gap-4 p-6 border-b">
                 <div className="flex flex-row items-center gap-2">
                   <CartButton
-                    //isPurchased={data?.isPurchased}
+                    isPurchased={data.isPurchased}
                     productId={productId}
                     tenantSlug={tenantSlug}
                   />
-                  {/* <Button variant={"elevated"} className="flex-1 bg-pink-400">
-                    Add to cart
-                  </Button> */}
 
                   <Button
                     className="size-12"
@@ -154,9 +154,9 @@ export const ProductView = ({ productId, tenantSlug }: ProductViewProps) => {
                   </Button>
                 </div>
                 <p className="text-center font-medium">
-                  {data?.refundPolicy === "no-refund"
+                  {product?.refundPolicy === "no-refund"
                     ? "No refunds"
-                    : `${data?.refundPolicy} money back guarantee`}
+                    : `${product?.refundPolicy} money back guarantee`}
                 </p>
               </div>
               <div className="p-6">

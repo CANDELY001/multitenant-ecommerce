@@ -51,7 +51,7 @@ export const SearchInput = ({ disabled }: Props) => {
       {/* Library button - only render on client to prevent hydration mismatch */}
       {isClient && session.data?.user && (
         <Button asChild variant="elevated">
-          <Link href="/library">
+          <Link prefetch href="/library">
             <BookmarkCheckIcon className="size-4" />
             Library
           </Link>
