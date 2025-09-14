@@ -63,7 +63,7 @@ export const ProductList = ({ category, tenantSlug, narrowView }: Props) => {
             <ProductCard
               key={product.id}
               id={product.id.toString()}
-              name={product.name}
+              name={(product as any).name}
               imageUrl={
                 typeof product.image === "object" && product.image?.url
                   ? product.image.url
@@ -82,9 +82,9 @@ export const ProductList = ({ category, tenantSlug, narrowView }: Props) => {
                   ? product.tenant.image.url
                   : undefined
               }
-              reviewRating={4}
-              reviewCount={5}
-              price={product.price}
+              reviewRating={product.reviewRating}
+              reviewCount={product.reviewCount}
+              price={(product as any).price}
             />
           ))}
       </div>
