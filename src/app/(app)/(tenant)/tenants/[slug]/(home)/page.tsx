@@ -5,6 +5,7 @@ import { ProductListView } from "@/modules/products/ui/views/product-list-view";
 import { loadProductFilters } from "@/modules/products/search-params";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 
+export const dynamic = "force-dynamic";
 interface Props {
   params: Promise<{
     slug: string;

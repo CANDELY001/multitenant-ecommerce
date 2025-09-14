@@ -7,7 +7,6 @@ import {
   SearchFiltersLoading,
 } from "../../../modules/home/ui/components/search-filters";
 import { getQueryClient, trpc } from "@/trpc/server";
-import { Search } from "lucide-react";
 
 interface layoutProps {
   children: ReactNode;

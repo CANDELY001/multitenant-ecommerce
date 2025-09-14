@@ -7,6 +7,7 @@ import { ReviewSidebar } from "../components/review-sidebar";
 import { Suspense } from "react";
 import { ReviewFormSkeleton } from "../components/review-form";
 import { RichText } from "@payloadcms/richtext-lexical/react";
+import { Product } from "@/payload-types";
 
 interface Props {
   productId: string;
@@ -22,7 +23,7 @@ export const ProductView = ({ productId }: Props) => {
   );
 
   // Type assertion to access all product properties
-  const product = data as any;
+  const product = data as unknown as Product;
 
   return (
     <div className="min-h-screen bg-white">

@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { baseProcedure, createTRPCRouter } from "@/trpc/init";
-import { headers as getHeaders, cookies as getCookies } from "next/headers";
+import { headers as getHeaders } from "next/headers";
 import { TRPCError } from "@trpc/server";
 import { generateAuthCookie } from "../utils";
 import { registerSchema } from "../ui/schemas";
@@ -32,7 +32,7 @@ export const authRouter = createTRPCRouter({
         },
       });
       // First create the user
-      const user = await ctx.payload.create({
+      await ctx.payload.create({
         collection: "users",
         data: {
           email: input.email,

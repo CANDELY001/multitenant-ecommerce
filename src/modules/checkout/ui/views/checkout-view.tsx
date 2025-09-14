@@ -10,6 +10,7 @@ import { CheckoutSidebar } from "../components/checkout-sidebar";
 import { InboxIcon, LoaderIcon } from "lucide-react";
 import { useCheckoutStates } from "../../hooks/use-checkout-states";
 import { useRouter } from "next/navigation";
+import { Product } from "@/payload-types";
 
 interface CheckoutViewProps {
   tenantSlug: string;
@@ -95,8 +96,6 @@ export const CheckoutView = ({ tenantSlug }: CheckoutViewProps) => {
         <div className="lg:col-span-4">
           <div className="border rounded-md overflow-hidden bg-white">
             {data?.docs.map((product, index) => {
-              // Type assertion to access product properties
-              const productData = product as any;
               return (
                 <CheckoutItem
                   key={product.id}
@@ -106,7 +105,7 @@ export const CheckoutView = ({ tenantSlug }: CheckoutViewProps) => {
                       ? product.image.url
                       : undefined
                   }
-                  name={productData.name}
+                  name={(product as unknown as Product).name}
                   productUrl={`${generateTenantURL(
                     typeof product.tenant === "object" && product.tenant?.slug
                       ? product.tenant.slug
@@ -122,7 +121,7 @@ export const CheckoutView = ({ tenantSlug }: CheckoutViewProps) => {
                       ? product.tenant.name
                       : "Unknown Tenant"
                   }
-                  price={productData.price}
+                  price={(product as unknown as Product).price}
                   onRemove={() => removeProduct(String(product.id))}
                 />
               );

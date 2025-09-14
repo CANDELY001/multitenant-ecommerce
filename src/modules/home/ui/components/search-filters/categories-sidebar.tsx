@@ -3,7 +3,6 @@ import {
   SheetContent,
   SheetHeader,
   SheetTitle,
-  SheetTrigger,
 } from "@/components/ui/sheet";
 import { CustomCategory } from "../../../../../app/(app)/(home)/types";
 import { useState } from "react";
@@ -12,7 +11,6 @@ import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useTRPC } from "@/trpc/client";
 import { useQuery } from "@tanstack/react-query";
-import { Category } from "@/payload-types";
 
 interface Props {
   Open: boolean;

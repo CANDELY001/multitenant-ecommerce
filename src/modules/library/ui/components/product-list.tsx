@@ -5,6 +5,7 @@ import { ProductCard, ProductCardSkeleton } from "./product-card";
 import { DEFAULT_LIMIT } from "@/constant";
 import { Button } from "@/components/ui/button";
 import { InboxIcon } from "lucide-react";
+import { Product } from "@/payload-types";
 
 export const ProductList = () => {
   const trpc = useTRPC();
@@ -39,7 +40,7 @@ export const ProductList = () => {
             <ProductCard
               key={String(product.id)}
               id={String(product.id)}
-              name={(product as any).name} // Type assertion for Payload CMS depth population
+              name={(product as unknown as Product).name} // Type assertion for Payload CMS depth population
               imageUrl={product.image?.url}
               tenantSlug={product.tenant?.slug}
               tenantImageUrl={product.tenant?.image?.url}

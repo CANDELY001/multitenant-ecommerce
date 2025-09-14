@@ -1,4 +1,4 @@
-import { Media, Tenant } from "@/payload-types";
+import { Media, Tenant, Product } from "@/payload-types";
 import { createTRPCRouter, protectedProcedure } from "@/trpc/init";
 import { z } from "zod";
 import { DEFAULT_LIMIT } from "@/constant";
@@ -113,8 +113,8 @@ export const libraryRouter = createTRPCRouter({
         ...productsData,
         docs: dataWithSummarizedReview.map((doc) => ({
           ...doc, // Spread all product properties
-          image: (doc as any).images as Media | null, // Map image property with type assertion
-          tenant: (doc as any).tenant as Tenant & { image: Media | null },
+          image: (doc as unknown as Product).images as Media | null, // Map image property with type assertion
+          tenant: (doc as unknown as Product).tenant as Tenant & { image: Media | null },
         })),
       };
     }),

@@ -7,7 +7,6 @@ import { cn } from "@/lib/utils";
 import { ListFilterIcon } from "lucide-react";
 import { CategoriesSidebar } from "./categories-sidebar";
 import { useParams } from "next/navigation";
-import { ca } from "date-fns/locale";
 
 interface Props {
   data: CustomCategory[];

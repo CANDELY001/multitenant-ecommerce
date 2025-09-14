@@ -2,13 +2,13 @@
 import { useTRPC } from "@/trpc/client";
 import {
   useSuspenseInfiniteQuery,
-  useSuspenseQuery,
 } from "@tanstack/react-query";
 import React from "react";
 import { useProductFilters } from "../../hooks/use-product-filters";
 import { ProductCard } from "./product-card";
 import { DEFAULT_LIMIT } from "@/constant";
 import { InboxIcon } from "lucide-react";
+import { Product } from "@/payload-types";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ProductCardSkeleton } from "./product-card";
@@ -63,7 +63,7 @@ export const ProductList = ({ category, tenantSlug, narrowView }: Props) => {
             <ProductCard
               key={product.id}
               id={product.id.toString()}
-              name={(product as any).name}
+              name={(product as unknown as Product).name}
               imageUrl={
                 typeof product.image === "object" && product.image?.url
                   ? product.image.url
@@ -84,7 +84,7 @@ export const ProductList = ({ category, tenantSlug, narrowView }: Props) => {
               }
               reviewRating={product.reviewRating}
               reviewCount={product.reviewCount}
-              price={(product as any).price}
+              price={(product as unknown as Product).price}
             />
           ))}
       </div>

@@ -1,7 +1,7 @@
 import { baseProcedure, createTRPCRouter } from "@/trpc/init";
 import { Sort, Where } from "payload";
 import { z } from "zod";
-import { Category, Media, Product, Tenant } from "@/payload-types";
+import { Category, Media, Tenant, Product } from "@/payload-types";
 import { sortValues } from "../search-params";
 import { DEFAULT_LIMIT } from "@/constant";
 import { headers as getHeaders } from "next/headers";
@@ -126,9 +126,6 @@ export const productRouter = createTRPCRouter({
     )
     .query(async ({ ctx, input }) => {
       try {
-        // Get headers for session handling
-        const headers = await getHeaders();
-
         const where: Where = {
           isArchived: {
             not_equals: true,
@@ -253,8 +250,8 @@ export const productRouter = createTRPCRouter({
           ...data,
           docs: dataWithSummarizedReview.map((product) => ({
             ...product,
-            image: (product as any).images as Media | null,
-            tenant: (product as any).tenant as Tenant & { image: Media | null },
+            image: (product as unknown as Product).images as Media | null,
+            tenant: (product as unknown as Product).tenant as Tenant & { image: Media | null },
           })),
         };
       } catch (error) {
