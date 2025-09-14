@@ -129,7 +129,11 @@ export const productRouter = createTRPCRouter({
         // Get headers for session handling
         const headers = await getHeaders();
 
-        const where: Where = {};
+        const where: Where = {
+          isArchived: {
+            not_equals: true,
+          },
+        };
 
         let sort: Sort = "-createdAt";
         if (input.sort === "curated") {
@@ -201,37 +205,13 @@ export const productRouter = createTRPCRouter({
 
         // Filter by tenant if tenantSlug is provided
         if (input.tenantSlug) {
-          // First, find the tenant by slug
-          const tenantData = await ctx.payload.find({
-            collection: "tenants",
-            where: {
-              slug: {
-                equals: input.tenantSlug,
-              },
-            },
-            limit: 1,
-          });
-
-          const tenant = tenantData.docs[0];
-          if (tenant) {
-            where["tenant"] = {
-              equals: tenant.id,
-            };
-          } else {
-            // If tenant doesn't exist, return empty results
-            return {
-              docs: [],
-              totalDocs: 0,
-              limit: input.limit,
-              totalPages: 0,
-              page: input.cursor,
-              pagingCounter: 0,
-              hasPrevPage: false,
-              hasNextPage: false,
-              prevPage: null,
-              nextPage: null,
-            };
-          }
+          where["tenant.slug"] = {
+            equals: input.tenantSlug,
+          };
+        } else {
+          where["isPrivate"] = {
+            not_equals: true,
+          };
         }
 
         const data = await ctx.payload.find({

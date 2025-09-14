@@ -17,7 +17,7 @@ export const checkoutRouter = createTRPCRouter({
     const user = await ctx.payload.findByID({
       collection: "users",
       id: ctx.session.user.id,
-      depth: 0, // user.tenants[0].tenant vil være en string (tenatn ID)
+      depth: 0, // No need to fetch relations
     });
     if (!user) {
       throw new TRPCError({
@@ -80,11 +80,11 @@ export const checkoutRouter = createTRPCRouter({
                 equals: input.tenantSlug,
               },
             },
-            // {
-            //   isArchived: {
-            //     not_equals: true,
-            //   },
-            //},
+            {
+              isArchived: {
+                not_equals: true,
+              },
+            },
           ],
         },
       });
@@ -191,9 +191,18 @@ export const checkoutRouter = createTRPCRouter({
         collection: "products",
         depth: 2,
         where: {
-          id: {
-            in: input.ids,
-          },
+          and: [
+            {
+              id: {
+                in: input.ids,
+              },
+            },
+            {
+              isArchived: {
+                not_equals: true,
+              },
+            },
+          ],
         },
       });
       if (data.totalDocs !== input.ids.length) {
