@@ -78,15 +78,16 @@ export const ProductView = ({ productId, tenantSlug }: ProductViewProps) => {
                   href={generateTenantURL(tenantSlug)}
                   className="flex items-center gap-2"
                 >
-                  {typeof data?.tenant === "object" &&
-                    data?.tenant?.image &&
-                    typeof data.tenant.image === "object" &&
-                    data.tenant.image.url && (
+                  {typeof product?.tenant === "object" &&
+                    product?.tenant?.image &&
+                    typeof product.tenant.image === "object" &&
+                    product.tenant.image.url && (
                       <Image
-                        src={data.tenant.image.url}
+                        src={product.tenant.image.url}
                         alt={
-                          typeof data.tenant === "object" && data.tenant.name
-                            ? data.tenant.name
+                          typeof product.tenant === "object" &&
+                          product.tenant.name
+                            ? product.tenant.name
                             : "Tenant"
                         }
                         width={20}
@@ -95,8 +96,9 @@ export const ProductView = ({ productId, tenantSlug }: ProductViewProps) => {
                       />
                     )}
                   <p className="text-base underline font-medium">
-                    {typeof data?.tenant === "object" && data?.tenant?.name
-                      ? data.tenant.name
+                    {typeof product?.tenant === "object" &&
+                    product?.tenant?.name
+                      ? product.tenant.name
                       : "Unknown Tenant"}
                   </p>
                 </Link>
@@ -106,8 +108,7 @@ export const ProductView = ({ productId, tenantSlug }: ProductViewProps) => {
                   <StarRating rating={3} iconClassName="size-4" />
                 </div>
                 <p className="text-base font-medium">
-                  {/* {data.reviewCount} ratings */}
-                  {5} ratings
+                  {product.reviewCount} ratings ratings
                 </p>
               </div>
             </div>
@@ -132,7 +133,7 @@ export const ProductView = ({ productId, tenantSlug }: ProductViewProps) => {
               <div className="flex flex-col gap-4 p-6 border-b">
                 <div className="flex flex-row items-center gap-2">
                   <CartButton
-                    isPurchased={data.isPurchased}
+                    isPurchased={product.isPurchased}
                     productId={productId}
                     tenantSlug={tenantSlug}
                   />
@@ -164,8 +165,8 @@ export const ProductView = ({ productId, tenantSlug }: ProductViewProps) => {
                   <h3 className="text-xl font-medium">Ratings</h3>
                   <div className="flex items-center gap-x-1 font-medium">
                     <StarIcon className="size-4 fill-black" />
-                    <p>({5})</p>
-                    <p className="text-base">{5} ratings</p>
+                    <p>({product.reviewRating})</p>
+                    <p className="text-base">{product.reviewCount} ratings</p>
                   </div>
                 </div>
                 <div className="grid grid-cols-[auto_1fr_auto] gap-3 mt-4">
@@ -174,8 +175,13 @@ export const ProductView = ({ productId, tenantSlug }: ProductViewProps) => {
                       <div className="font-medium">
                         {stars} {stars === 1 ? "star" : "stars"}
                       </div>
-                      <Progress value={50} className="h-[1lh]" />
-                      <div className="font-medium">{50}%</div>
+                      <Progress
+                        value={product.ratingDistribution[stars]}
+                        className="h-[1lh]"
+                      />
+                      <div className="font-medium">
+                        {product.ratingDistribution[stars]}%
+                      </div>
                     </Fragment>
                   ))}
                 </div>
