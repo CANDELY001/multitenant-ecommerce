@@ -1,5 +1,6 @@
 import { getPayload } from "payload";
 import config from "./payload.config";
+import { stripe } from "./lib/strip";
 
 const categories = [
   {
@@ -140,7 +141,7 @@ const categories = [
 export const seedCategories = async () => {
   const payload = await getPayload({ config });
 
-  //const adminAccount = await stripe.accounts.create({});
+  const adminAccount = await stripe.accounts.create({});
 
   // Create admin tenant
   const adminTenant = await payload.create({
@@ -148,8 +149,8 @@ export const seedCategories = async () => {
     data: {
       name: "admin",
       slug: "admin",
-      // stripeAccountId: "acct_test_admin_placeholder", // Placeholder for seeding
-      // stripeDetailsSubmitted: false,
+      stripeAccountId: adminAccount.id,
+      //stripeDetailsSubmitted: false,
     },
   });
 

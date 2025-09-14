@@ -48,7 +48,7 @@ export const ProductView = ({ productId }: Props) => {
           </div>
           <div className="lg:col-span-5">
             {product.content ? (
-              <RichText data={product.content} />
+              <p>{product.content}</p>
             ) : (
               <p className="font-medium italic to-muted-foreground">
                 No special content

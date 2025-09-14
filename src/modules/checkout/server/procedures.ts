@@ -13,6 +13,50 @@ import { generateTenantURL } from "@/lib/utils";
 import { stripe } from "@/lib/strip";
 
 export const checkoutRouter = createTRPCRouter({
+  verify: protectedProcedure.mutation(async ({ ctx }) => {
+    const user = await ctx.payload.findByID({
+      collection: "users",
+      id: ctx.session.user.id,
+      depth: 0, // user.tenants[0].tenant vil være en string (tenatn ID)
+    });
+    if (!user) {
+      throw new TRPCError({
+        code: "NOT_FOUND",
+        message: "User not found",
+      });
+    }
+
+    const tenantId = user.tenants?.[0]?.tenant as string;
+
+    const tenant = await ctx.payload.findByID({
+      collection: "tenants",
+      id: tenantId,
+    });
+
+    if (!tenant) {
+      throw new TRPCError({
+        code: "NOT_FOUND",
+        message: "Tentant not found",
+      });
+    }
+
+    const accountLink = await stripe.accountLinks.create({
+      account: tenant.stripeAccountId,
+      refresh_url: `${process.env.NEXT_PUBLIC_APP_URL!}/admin`,
+      return_url: `${process.env.NEXT_PUBLIC_APP_URL!}/admin`,
+      type: "account_onboarding",
+    });
+    console.log("ACCOUNT LINK:", accountLink);
+
+    if (!accountLink) {
+      throw new TRPCError({
+        code: "BAD_REQUEST",
+        message: "Failed to create veifiycation link",
+      });
+    }
+
+    return { url: accountLink.url };
+  }),
   purchase: protectedProcedure
     .input(
       z.object({
@@ -71,12 +115,12 @@ export const checkoutRouter = createTRPCRouter({
         });
       }
 
-      // if (!tenant.stripeDetailsSubmitted) {
-      //   throw new TRPCError({
-      //     code: 'BAD_REQUEST',
-      //     message: 'Tenant not allowd to sell products',
-      //   })
-      // }
+      if (!tenant.stripeDetailsSubmitted) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Tenant not allowd to sell products",
+        });
+      }
       const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] =
         products.docs.map((product) => ({
           quantity: 1,
@@ -99,16 +143,16 @@ export const checkoutRouter = createTRPCRouter({
         0
       );
 
-      // const platformFeeAmount = Math.round(
-      //   (totalAmount * PLATFORM_FEE_PERCENTAGE) / 100
-      // );
+      const platformFeeAmount = Math.round(
+        (totalAmount * PLATFORM_FEE_PERCENTAGE) / 100
+      );
 
       const domain = generateTenantURL(input.tenantSlug);
       const checkout = await stripe.checkout.sessions.create(
         {
           customer_email: ctx.session.user.email,
-          success_url: `${domain}/checkout?success=true`,
-          cancel_url: `${domain}/checkout?cancel=true`,
+          success_url: `${process.env.NEXT_PUBLIC_APP_URL}/tenants/${input.tenantSlug}/checkout?success=true`,
+          cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/tenants/${input.tenantSlug}/checkout?cancel=true`,
           mode: "payment",
           line_items: lineItems,
           invoice_creation: {
@@ -117,13 +161,13 @@ export const checkoutRouter = createTRPCRouter({
           metadata: {
             userId: ctx.session.user.id,
           } as CheckoutMetadata,
-          // payment_intent_data: {
-          //   application_fee_amount: platformFeeAmount,
-          // },
+          payment_intent_data: {
+            application_fee_amount: platformFeeAmount,
+          },
+        },
+        {
+          stripeAccount: tenant.stripeAccountId,
         }
-        // {
-        //   stripeAccount: tenant.stripeAccountId,
-        // }
       );
 
       if (!checkout.url) {
