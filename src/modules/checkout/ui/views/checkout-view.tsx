@@ -8,7 +8,6 @@ import { generateTenantURL } from "@/lib/utils";
 import { CheckoutItem } from "../components/checkout-items";
 import { CheckoutSidebar } from "../components/checkout-sidebar";
 import { InboxIcon, LoaderIcon } from "lucide-react";
-import { on } from "events";
 import { useCheckoutStates } from "../../hooks/use-checkout-states";
 import { useRouter } from "next/navigation";
 
@@ -49,7 +48,7 @@ export const CheckoutView = ({ tenantSlug }: CheckoutViewProps) => {
 
   useEffect(() => {
     if (states.success) {
-      //setStates({ success: false, cancel: false });
+      setStates({ success: false, cancel: false });
       clearCart();
       router.push("/products");
     }
@@ -94,8 +93,8 @@ export const CheckoutView = ({ tenantSlug }: CheckoutViewProps) => {
                   key={product.id}
                   isLast={index === data.docs.length - 1}
                   imageUrl={
-                    typeof product.images === "object" && product.images?.url
-                      ? product.images.url
+                    typeof product.image === "object" && product.image?.url
+                      ? product.image.url
                       : undefined
                   }
                   name={productData.name}

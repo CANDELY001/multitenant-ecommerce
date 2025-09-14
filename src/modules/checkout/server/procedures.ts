@@ -167,7 +167,7 @@ export const checkoutRouter = createTRPCRouter({
         totalPrice: totalPrice,
         docs: data.docs.map((doc) => ({
           ...doc,
-          image: doc.image as Media | null,
+          image: doc.images as Media | null,
           tenant: doc.tenant as Tenant & { image: Media | null },
         })),
       };
