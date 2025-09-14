@@ -19,8 +19,18 @@ const defaultTenantArrayField = tenantsArrayField({
 });
 export const Users: CollectionConfig = {
   slug: "users",
+  access: {
+    read: () => true,
+    create: ({ req }) => isSuperAdmin(req.user),
+    delete: ({ req }) => isSuperAdmin(req.user),
+    update: ({ req, id }) => {
+      if (isSuperAdmin(req.user)) return true;
+      return req.user?.id === id;
+    },
+  },
   admin: {
     useAsTitle: "email",
+    hidden: ({ user }) => !isSuperAdmin(user),
   },
   auth: true,
   fields: [
@@ -41,6 +51,9 @@ export const Users: CollectionConfig = {
       defaultValue: ["user"],
       hasMany: true,
       options: ["super-admin", "user"],
+      access: {
+        update: ({ req }) => isSuperAdmin(req.user),
+      },
     },
     {
       ...defaultTenantArrayField,

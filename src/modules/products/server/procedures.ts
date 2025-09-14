@@ -241,6 +241,7 @@ export const productRouter = createTRPCRouter({
           where: where,
           limit: input.limit,
           page: input.cursor,
+          select: { content: false },
         });
         const dataWithSummarizedReview = await Promise.all(
           data.docs.map(async (product) => {
