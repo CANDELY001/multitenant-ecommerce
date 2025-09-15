@@ -20,6 +20,8 @@ export const categoriesRouter = createTRPCRouter({
         })
       ),
     }));
-    return formattedData;
+    return formattedData as Array<
+      Category & { subcategories: Omit<Category, "subcategories">[] }
+    >;
   }),
 });

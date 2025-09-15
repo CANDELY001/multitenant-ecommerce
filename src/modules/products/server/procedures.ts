@@ -121,6 +121,7 @@ export const productRouter = createTRPCRouter({
         maxPrice: z.string().nullable().optional(),
         tags: z.array(z.string()).nullable().optional(),
         sort: z.enum(sortValues).nullable().optional(),
+        search: z.string().nullable().optional(),
         tenantSlug: z.string().nullable().optional(),
       })
     )
@@ -142,6 +143,12 @@ export const productRouter = createTRPCRouter({
         if (input.sort === "hot_and_new") {
           sort = "+createdAt"; // Example: Curated products sorted by creation date
         }
+        if (input.search) {
+          where["name"] = {
+            like: input.search,
+          };
+        }
+
         if (input.minPrice && input.maxPrice) {
           where.price = {
             greater_than_equal: input.minPrice,

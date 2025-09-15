@@ -1,58 +1,59 @@
-"use client";
+import { useEffect, useState } from "react";
+import { BookmarkCheckIcon, ListFilterIcon, SearchIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { BookmarkCheckIcon, ListFilter, SearchIcon } from "lucide-react";
-import { CategoriesSidebar } from "./categories-sidebar";
-import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import { CategoriesSidebar } from "./categories-sidebar";
 import { useTRPC } from "@/trpc/client";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 
 interface Props {
   disabled?: boolean;
-  //data: CustomCategory[];
+  defaultValue?: string | undefined;
+  onChange?: (value: string) => void;
 }
 
-export const SearchInput = ({ disabled }: Props) => {
+export const SearchInput = ({ disabled, defaultValue, onChange }: Props) => {
+  const [searchValue, setSearchValue] = useState(defaultValue || "");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [isClient, setIsClient] = useState(false);
 
   const trpc = useTRPC();
-  const session = useQuery({
-    ...trpc.auth.session.queryOptions(),
-    retry: false,
-    refetchOnWindowFocus: false,
-  });
+  const session = useQuery(trpc.auth.session.queryOptions());
 
-  // Prevent hydration mismatch by only rendering user-dependent content on client
   useEffect(() => {
-    setIsClient(true);
-  }, []);
+    const timeoutId = setTimeout(() => {
+      onChange?.(searchValue);
+    }, 400);
+
+    return () => clearTimeout(timeoutId);
+  }, [searchValue, onChange]);
 
   return (
     <div className="flex items-center gap-2 w-full">
-      <CategoriesSidebar onOpenChange={setIsSidebarOpen} Open={isSidebarOpen} />
+      <CategoriesSidebar Open={isSidebarOpen} onOpenChange={setIsSidebarOpen} />
       <div className="relative w-full">
         <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-neutral-500" />
         <Input
+          value={searchValue}
           className="pl-8"
-          placeholder="Search products"
+          placeholder="Search product"
           disabled={disabled}
+          onChange={(e) => setSearchValue(e.target.value)}
         />
       </div>
-      {/* TODO: Add categories view all button */}
+
       <Button
         variant="elevated"
-        className="size-12 shrink-0 flex lg:hidden md:hidden"
+        className="size-12 shrink-0 flex lg:hidden"
         onClick={() => setIsSidebarOpen(true)}
       >
-        <ListFilter className="size-4" />
+        <ListFilterIcon />
       </Button>
-      {/* Library button - only render on client to prevent hydration mismatch */}
-      {isClient && session.data?.user && (
+
+      {session.data?.user && (
         <Button asChild variant="elevated">
-          <Link prefetch href="/library">
-            <BookmarkCheckIcon className="size-4" />
+          <Link href="/library">
+            <BookmarkCheckIcon />
             Library
           </Link>
         </Button>
