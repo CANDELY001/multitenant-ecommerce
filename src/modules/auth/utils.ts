@@ -17,7 +17,7 @@ export const generateAuthCookie = async ({ prefix, value }: Props) => {
   const cookieOptions = {
     httpOnly: true,
     path: "/",
-    sameSite: isProduction ? ("none" as const) : ("lax" as const),
+    sameSite: isProduction ? ("none" as const) : ("none" as const),
     domain: isProduction ? process.env.NEXT_PUBLIC_ROOT_DOMAIN : undefined,
     secure: isProduction,
     maxAge: 7 * 24 * 60 * 60, // 7 days
