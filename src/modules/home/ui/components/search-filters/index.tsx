@@ -71,3 +71,6 @@ export const SearchFiltersSkeleton = () => {
     </div>
   );
 };
+
+// Export as SearchFiltersLoading for compatibility with layout
+export const SearchFiltersLoading = SearchFiltersSkeleton;
