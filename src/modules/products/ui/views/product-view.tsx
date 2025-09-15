@@ -50,7 +50,7 @@ export const ProductView = ({ productId, tenantSlug }: ProductViewProps) => {
         <div className="relative aspect-[3.9] border-b">
           <Image
             src={
-              typeof product?.image === "object" && product?.image.url
+              typeof product?.image === "object" && product?.image?.url
                 ? product.image.url
                 : "/placeholder.png"
             }
