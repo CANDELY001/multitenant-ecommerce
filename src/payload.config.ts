@@ -31,12 +31,6 @@ export default buildConfig({
       beforeNavLinks: ["@/components/stripe-verify#StripeVerify"],
     },
   },
-  // Configure server URL dynamically
-  serverURL:
-    process.env.NEXT_PUBLIC_SERVER_URL ||
-    (process.env.VERCEL_URL
-      ? `https://${process.env.VERCEL_URL}`
-      : "http://localhost:3000"),
   collections: [
     Users,
     Media,
