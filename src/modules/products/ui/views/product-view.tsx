@@ -1,7 +1,5 @@
 "use client";
 
-export const dynamic = 'force-dynamic';
-
 import { StarRating } from "@/components/star-rating";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -14,10 +12,10 @@ import Link from "next/link";
 import { Fragment, useState } from "react";
 //import { CartButton } from '../components/cart-button'
 import { RichText } from "@payloadcms/richtext-lexical/react";
-import dynamicImport from "next/dynamic";
+import dynamic from "next/dynamic";
 import { toast } from "sonner";
 
-const CartButton = dynamicImport(
+const CartButton = dynamic(
   () => import("../components/cart-button").then((mod) => mod.CartButton),
   {
     ssr: false,
@@ -41,8 +39,7 @@ export const ProductView = ({ productId, tenantSlug }: ProductViewProps) => {
     trpc.products.getOne.queryOptions({ id: productId })
   );
 
-  // Type assertion to access all product properties including extended ones
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // Type assertion to access all product properties
   const product = data as any;
 
   const [isCopied, setIsCopied] = useState(false);
@@ -53,7 +50,7 @@ export const ProductView = ({ productId, tenantSlug }: ProductViewProps) => {
         <div className="relative aspect-[3.9] border-b">
           <Image
             src={
-              typeof product?.image === "object" && product?.image?.url
+              typeof product?.image === "object" && product?.image.url
                 ? product.image.url
                 : "/placeholder.png"
             }
